@@ -1,6 +1,6 @@
 #pragma once
 
-enum Condtiion
+typedef enum
 {
 
-};
+} CONDITION;
