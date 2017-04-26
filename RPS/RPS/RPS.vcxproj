@@ -110,6 +110,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Condition.h" />
+    <ClInclude Include="Constants.h" />
+    <ClInclude Include="Individual.h" />
+    <ClInclude Include="Population.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Individual.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Population.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
