@@ -172,31 +172,162 @@ void Individual::DetermineInitialFitness()
 
 void Individual::UpdateNextMove()
 {
+    Rule* ruletemp = nullptr;
+    int highestScore = -1;
 
+    for (int i = 0; i < mRules.size(); i++)
+    {
+        //TODO ANITA: Eliminate version of IsRuleSatisfied without turn
+        if (Rule::IsRuleSatisfied(mRules[i], 0))
+        {
+            int ruleScore = mRules[i].GetRuleScore();
+            if (ruleScore > highestScore)
+            {
+                ruletemp = &mRules[i];
+                highestScore = ruleScore;
+            }
+        }
+    }
+
+    if (ruletemp != nullptr)
+    {
+        mNextMove = ruletemp->mMove;
+        mRulePlayed = ruletemp;
+    }
+    else
+    {
+        mNextMove = static_cast<MOVE>(rand() % 3);
+        mRulePlayed = nullptr;
+    }
 }
+
 void Individual::UpdateFitness()
 {
+    //mark that the rule was selected
+    if (mRulePlayed)
+mRulePlayed->mTimesUsed += 1;
+
+float reward = 0;
+//TODO
+//if (!History.empty())
+{
+    if (mIsPlayerOne)
+    {
+        //TODO: How to make conditions now?
+        //if (static_cast<int>(Condition::CreateCondition(nextMove, History.at(History.size() - 1).second)) < pow(2, 3))
+        {
+            reward += 1; //fitness = fitness*(1 - alpha) + reward*alpha;
+
+                         //mark that the rule won
+            if (mRulePlayed)
+                mRulePlayed->mTimesWon += 1;
+        }
+        //else if (static_cast<int>(createCondition(nextMove, History.at(History.size() - 1).second)) > pow(2, 5))
+        {
+            reward += -1; //fitness = fitness*(1 - alpha) + reward*alpha;
+        }
+    }
+    else
+    {
+        //if (static_cast<int>(createCondition(History.at(History.size() - 1).first, nextMove)) < pow(2, 3))
+        {
+            reward += -1; //fitness = fitness*(1 - alpha) + reward*alpha;
+                          //mark that the rule won
+            if (mRulePlayed)
+                mRulePlayed->mTimesWon += 1;
+        }
+        //else if (static_cast<int>(createCondition(History.at(History.size() - 1).first, nextMove)) > pow(2, 5))
+        {
+            reward += 1;// fitness = fitness*(1 - alpha) + reward*alpha;
+        }
+    }
+
+    //TODO: Evaluate based on history
+    //TODO: evaluate fitness every turn? Or less
+    mFitness = mFitness*(1 - ALPHA) + reward*ALPHA;
 
 }
+}
+
 void Individual::UpdateAverageScore()
 {
+    int scoreTemp = 0;
+    for (int i = 0; i < mRules.size(); i++)
+    {
+        scoreTemp += mRules[i].mScore;
+    }
 
+    mAverageScore = scoreTemp / mRules.size();
 }
+
 void Individual::UpdateAverageRulePoints()
 {
-
+    float pointTemp = 0;
+    for (int i = 0; i < mRules.size(); i++)
+    {
+        pointTemp += mRules[i].mTimesWon;
+    }
+    mAverageRulePoints = mRules.size() == 0 ? 0.0f : pointTemp / float(mRules.size());
 }
 
 float Individual::GetWinningRatio()
 {
-    return 0;
+    int totalTimesCalled = 0;
+    int totalTimesWon = 0;
+
+    for (int i = 0; i < mRules.size(); i++)
+    {
+        totalTimesCalled += mRules[i].mTimesUsed;
+        totalTimesWon += mRules[i].mTimesWon;
+    }
+
+    return totalTimesCalled == 0 ? 0.0f : totalTimesWon / totalTimesCalled;
 }
 
 float Individual::GetGeneticDistanceTo(const Individual* otherInd)
 {
-    return 0;
+    float sum1 = 0.0f;
+
+    for (int i = 0; i < mRules.size(); i++)
+    {
+        float sum2 = 0.0f;
+        for (int j = 0; j < otherInd->mRules.size(); j++)
+        {
+            sum2 += Rule::GetGeneticDistanceBetweenRules(mRules[i], otherInd->mRules[j]);
+        }
+        sum1 += sum2;
+    }
+
+    return (float)(sum1 / mRules.size());
 }
 float Individual::GetSemanticDistanceTo(const Individual* otherInd)
 {
-    return 0;
+    float distance = 0.0f;
+
+    for (int i = 0; i < mRules.size(); i++)
+    {
+        MOVE playedMove = NO;
+        int highscore = 0;
+        vector<Condition>& conditions = mRules[i].mConditions;
+
+        for (int j = 0; j < otherInd->mRules.size(); j++)
+        {
+            if (Rule::IsRuleSatisfied(otherInd->mRules[j], conditions))
+            {
+                int tempScore = otherInd->mRules[j].GetRuleScore();
+                if (playedMove == NO || tempScore > highscore)
+                {
+                    playedMove = otherInd->mRules[j].mMove;
+                    highscore = tempScore;
+                }
+            }
+        }
+
+        if (playedMove == NO || playedMove != mRules[i].mMove)
+        {
+            distance += 1.0f;
+        }
+    }
+
+    return distance;
 }

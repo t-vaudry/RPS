@@ -24,7 +24,8 @@ typedef enum
 {
     R,
     P,
-    S
+    S,
+    NO
 } MOVE; 
 
 struct Rule
@@ -34,7 +35,8 @@ public:
     vector<Condition> mConditions;
     MOVE mMove;
     int mScore; //Based on number of conditions
-    int mPoints; //Based on how often used/successful
+    int mTimesUsed; //Based on how often used/successful
+    int mTimesWon;
 
 public:
     //TODO ANITA: Do we need all 3? We probably don't ever need to pass conditions
@@ -43,6 +45,8 @@ public:
     static bool IsRuleSatisfied(Rule& rule, vector<Condition>& conditions);
 
     static Rule GenerateRandomRule(bool oneConditionOnly = false);
+
+    static float GetGeneticDistanceBetweenRules(const Rule& rule1, const Rule& rule2);
 
     inline int GetRuleScore() { return mScore; }
 };
