@@ -87,7 +87,7 @@ public:
     float GetSemanticDistanceTo(const Individual* otherInd);
 
     //Overloaded operators
-    inline double operator()() { return mFitness; }
+    inline double operator() () { return mFitness; }
     inline bool operator< (const Individual& otherInd) const { return mFitness < otherInd.mFitness; }
     inline bool operator> (const Individual& otherInd) const { return mFitness > otherInd.mFitness; }
 
@@ -96,7 +96,7 @@ public:
     ~Individual();
 };
 
-struct less_than_key
+struct LessThanKey
 {
     inline bool operator() (const Individual* ind1, const Individual* ind2)
     {
