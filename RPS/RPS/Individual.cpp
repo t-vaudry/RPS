@@ -14,7 +14,7 @@ Individual::Individual(bool isPlayerOne)
     mIsPlayerOne = isPlayerOne;
     mDefaultMove = static_cast<MOVE>(rand() % 3);
     mNextMove = mDefaultMove;
-    mRulePlayed = nullptr;
+    mRulePlayed = NULL;
     mAverageRulePoints = 0.0f;
     mAverageRulePoints = 0.0f;
 
@@ -32,7 +32,7 @@ Individual::Individual(Individual& parent, bool mutate)
     mIsPlayerOne = parent.mIsPlayerOne;
     mDefaultMove = static_cast<MOVE>(rand() % 3);
     mNextMove = mDefaultMove;
-    mRulePlayed = nullptr;
+    mRulePlayed = NULL;
     mAverageRulePoints = 0.0f;
     mAverageRulePoints = 0.0f;
 
@@ -47,6 +47,10 @@ Individual::Individual(Individual& parent, bool mutate)
     }
     DetermineInitialFitness();
     UpdateAverageScore();
+}
+
+Individual::~Individual() {
+    ClearRules();
 }
 
 void Individual::MutatePlayer(MUTATIONTYPE mutationBaseType)
@@ -205,9 +209,11 @@ void Individual::UpdateFitness()
 {
     //mark that the rule was selected
     if (mRulePlayed)
-mRulePlayed->mTimesUsed += 1;
+    {
+        mRulePlayed->mTimesUsed += 1;
+    }
 
-float reward = 0;
+    float reward = 0;
 //TODO
 //if (!History.empty())
 {

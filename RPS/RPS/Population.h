@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <algorithm>
+#include <assert.h>
 #include "Individual.h"
 #include "Constants.h"
 

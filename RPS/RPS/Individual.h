@@ -73,6 +73,8 @@ public:
 
     void MutatePlayer(MUTATIONTYPE mutationBaseType);
 
+    inline void AddRule(Rule rule) { mRules.push_back(rule); }
+
     void DeterminePastPlayedMoves();
     void DetermineInitialFitness();
 
@@ -93,6 +95,12 @@ public:
 
     //Getters
     inline float GetFitness() const { return mFitness; }
+    inline float GetAverageScore() const { return mAverageScore; }
+    inline float GetAverageRulePoints() const { return mAverageRulePoints; }
+    inline float GetNumberOfRules() const { return mRules.size(); }
+    inline Rule GetRule(int index) const { return mRules[index]; }
+
+    inline void ClearRules() { mRules.clear(); }
     ~Individual();
 };
 
