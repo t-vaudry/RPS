@@ -1,5 +1,8 @@
 #pragma once
 
+#ifndef __INDIVIDUAL_H__
+#define __INDIVIDUAL_H__
+
 #include <iostream>
 #include <vector>
 
@@ -40,8 +43,8 @@ public:
 
 public:
     //TODO ANITA: Do we need all 3? We probably don't ever need to pass conditions
-    static bool IsRuleSatisfied(Rule& rule);
-    static bool IsRuleSatisfied(Rule& rule, int turn = 0); //Could replace the basic version
+    static bool IsRuleSatisfied(Rule& rule) { return false; }
+    static bool IsRuleSatisfied(Rule& rule, int turn = 0) { return false; } //Could replace the basic version
     static bool IsRuleSatisfied(Rule& rule, vector<Condition>& conditions);
 
     static Rule GenerateRandomRule(bool oneConditionOnly = false);
@@ -85,8 +88,8 @@ public:
 
     float GetWinningRatio();
 
-    float GetGeneticDistanceTo(const Individual* otherInd);
-    float GetSemanticDistanceTo(const Individual* otherInd);
+    float GetGeneticDistanceTo(Individual* otherInd);
+    float GetSemanticDistanceTo(Individual* otherInd);
 
     //Overloaded operators
     inline double operator() () { return mFitness; }
@@ -113,3 +116,4 @@ struct LessThanKey
     }
 };
 
+#endif // __INDIVIDUAL_H__

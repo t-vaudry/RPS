@@ -2,6 +2,23 @@
 
 #include "Constants.h"
 
+int Individual::mIDCounter = 0;
+
+bool Rule::IsRuleSatisfied(Rule& rule, vector<Condition>& conditions)
+{
+    return false;
+}
+
+float Rule::GetGeneticDistanceBetweenRules(const Rule& one, const Rule& two)
+{
+    return 0.0f;
+}
+
+Rule Rule::GenerateRandomRule(bool oneConditionOnly)
+{
+    return Rule();
+}
+
 Individual::Individual()
 {
     //TODO
@@ -129,7 +146,7 @@ void Individual::DeterminePastPlayedMoves()
 void Individual::DetermineInitialFitness()
 {
     float reward = 0;
-    int histroyLookBack = MAX_HISTORY_LOOKBACK;
+    int historyLookBack = MAX_HISTORY_LOOKBACK;
     //TODO ANITA: Add history
     //if (!History.empty())
     {
@@ -138,7 +155,7 @@ void Individual::DetermineInitialFitness()
 
         if (mIsPlayerOne)
         {
-            for (int i = 0; i < histroyLookBack; i++)
+            for (int i = 0; i < historyLookBack; i++)
             {
                 //if (static_cast<int>(createCondition(playedMove[i], History.at(History.size() - i - 1).second)) < pow(2, 3))
                 //{
@@ -152,7 +169,7 @@ void Individual::DetermineInitialFitness()
         }
         else
         {
-            for (int i = 0; i < histroyLookBack; i++)
+            for (int i = 0; i < historyLookBack; i++)
             {
                 //if (static_cast<int>(createCondition(History.at(History.size() - 1 - i).first, playedMove[i])) < pow(2, 3))
                 //{
@@ -167,7 +184,7 @@ void Individual::DetermineInitialFitness()
 
         //TODO: Evaluate based on history
         //TODO: evaluate fitness every turn? Or less
-        if (histroyLookBack != 0)
+        if (historyLookBack != 0)
         {
             //mFitness = mFitness*(1 - ALPHA) + (reward / historyLookBack)*ALPHA;
         }
@@ -290,7 +307,7 @@ float Individual::GetWinningRatio()
     return totalTimesCalled == 0 ? 0.0f : totalTimesWon / totalTimesCalled;
 }
 
-float Individual::GetGeneticDistanceTo(const Individual* otherInd)
+float Individual::GetGeneticDistanceTo(Individual* otherInd)
 {
     float sum1 = 0.0f;
 
@@ -306,7 +323,7 @@ float Individual::GetGeneticDistanceTo(const Individual* otherInd)
 
     return (float)(sum1 / mRules.size());
 }
-float Individual::GetSemanticDistanceTo(const Individual* otherInd)
+float Individual::GetSemanticDistanceTo(Individual* otherInd)
 {
     float distance = 0.0f;
 
@@ -320,7 +337,7 @@ float Individual::GetSemanticDistanceTo(const Individual* otherInd)
         {
             if (Rule::IsRuleSatisfied(otherInd->mRules[j], conditions))
             {
-                int tempScore = otherInd->mRules[j].GetRuleScore();
+                int tempScore = otherInd->GetRule(j).GetRuleScore();
                 if (playedMove == NO || tempScore > highscore)
                 {
                     playedMove = otherInd->mRules[j].mMove;

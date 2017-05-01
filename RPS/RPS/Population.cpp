@@ -121,7 +121,7 @@ void Population::Evolve()
     while (parents.size() < mSize * PARENT_SIZE)
     {
         int indexSelectedParent;
-        Individual* fittestPlayer;
+        Individual* fittestPlayer = NULL;
 
         for (int i = 0; i < 3; i++)
         {
@@ -263,21 +263,6 @@ float Population::GetAverageNumberOfRules()
     }
 
     return numRules / (float)mSize;
-}
-
-Individual* Population::GetChampion()
-{
-    return mChampion;
-}
-
-float Population::GetChampionFitness()
-{
-    return mChampion->GetFitness();
-}
-
-MOVE Population::GetChampionNextMove()
-{
-    return mChampion->GetNextMove();
 }
 
 void Population::SwitchChampion()

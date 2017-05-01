@@ -48,7 +48,7 @@ void PlayBot(char* file, char* directory)
             MOVE ourMove = population->GetChampionNextMove();
             MOVE botMove;
 
-            pyCurrentBot = PlayBotRound(pyCurrentBot, (rounds == 0) ? history->GetLastMove() : -1);
+            pyCurrentBot = PlayBotRound(pyCurrentBot, (rounds != 0) ? history->GetLastMove() : -1);
             botMove = static_cast<MOVE>(pyCurrentBot->outputMove);
 
             history->Add(ourMove, botMove);
