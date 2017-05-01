@@ -26,43 +26,6 @@ Population::~Population()
     }
 }
 
-float Population::AverageAccuracyOfRules()
-{
-    float sumRules = 0.0f;
-
-    for (int i = 0; i < mSize; i++)
-    {
-        sumRules += mIndividuals[i]->GetAverageScore();
-    }
-
-    return sumRules / (float) mSize;
-}
-
-float Population::AveragePointsOfRules()
-{
-    float sumPoints = 0.0f;
-
-    for (int i = 0; i < mSize; i++)
-    {
-        mIndividuals[i]->UpdateAverageRulePoints();
-        sumPoints += mIndividuals[i]->GetAverageRulePoints();
-    }
-
-    return sumPoints / (float) mSize;
-}
-
-float Population::AverageNumberOfRules()
-{
-    float numRules = 0.0f;
-
-    for (int i = 0; i < mSize; i++)
-    {
-        numRules += mIndividuals[i]->GetNumberOfRules();
-    }
-
-    return numRules / (float) mSize;
-}
-
 vector<Individual*> Population::Crossover(Individual* father, Individual* mother)
 {
     vector<Individual*> children;
@@ -263,6 +226,58 @@ void Population::Evolve()
 
     mIndividuals = newPopulation;
     SwitchChampion();
+}
+
+float Population::GetAverageAccuracyOfRules()
+{
+    float sumRules = 0.0f;
+
+    for (int i = 0; i < mSize; i++)
+    {
+        sumRules += mIndividuals[i]->GetAverageScore();
+    }
+
+    return sumRules / (float)mSize;
+}
+
+float Population::GetAveragePointsOfRules()
+{
+    float sumPoints = 0.0f;
+
+    for (int i = 0; i < mSize; i++)
+    {
+        mIndividuals[i]->UpdateAverageRulePoints();
+        sumPoints += mIndividuals[i]->GetAverageRulePoints();
+    }
+
+    return sumPoints / (float)mSize;
+}
+
+float Population::GetAverageNumberOfRules()
+{
+    float numRules = 0.0f;
+
+    for (int i = 0; i < mSize; i++)
+    {
+        numRules += mIndividuals[i]->GetNumberOfRules();
+    }
+
+    return numRules / (float)mSize;
+}
+
+Individual* Population::GetChampion()
+{
+    return mChampion;
+}
+
+float Population::GetChampionFitness()
+{
+    return mChampion->GetFitness();
+}
+
+MOVE Population::GetChampionNextMove()
+{
+    return mChampion->GetNextMove();
 }
 
 void Population::SwitchChampion()

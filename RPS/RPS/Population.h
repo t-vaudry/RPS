@@ -21,14 +21,20 @@ public:
     Population(int size);
     ~Population();
 
-    float AverageAccuracyOfRules();
-    float AveragePointsOfRules();
-    float AverageNumberOfRules();
     void Evolve();
     void SwitchChampion();
+
     void UpdateAverageFitness();
     void UpdateFitness();
     void UpdateNextMoves();
+
+    // Getters
+    float GetAverageAccuracyOfRules();
+    float GetAveragePointsOfRules();
+    float GetAverageNumberOfRules();
+    inline Individual* GetChampion();
+    inline float GetChampionFitness();
+    inline MOVE GetChampionNextMove();
 
 private:
     vector<Individual*> mIndividuals;

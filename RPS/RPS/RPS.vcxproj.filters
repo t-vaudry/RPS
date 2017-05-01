@@ -13,18 +13,30 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Python Interface Files">
+      <UniqueIdentifier>{4d642a7e-1889-4afb-857c-a95988a7d2f7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Condition.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Constants.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Individual.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Population.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Condition.h">
+    <ClInclude Include="pyInterface.h">
+      <Filter>Python Interface Files</Filter>
+    </ClInclude>
+    <ClInclude Include="History.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Constants.h">
+    <ClInclude Include="Library.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -38,5 +50,13 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="pyInterface.c">
+      <Filter>Python Interface Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="pyfunc.py">
+      <Filter>Python Interface Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

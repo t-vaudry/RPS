@@ -97,6 +97,7 @@ public:
     inline float GetFitness() const { return mFitness; }
     inline float GetAverageScore() const { return mAverageScore; }
     inline float GetAverageRulePoints() const { return mAverageRulePoints; }
+    inline MOVE GetNextMove() const { return mNextMove; }
     inline float GetNumberOfRules() const { return mRules.size(); }
     inline Rule GetRule(int index) const { return mRules[index]; }
 
