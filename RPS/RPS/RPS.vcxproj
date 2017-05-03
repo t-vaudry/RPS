@@ -118,6 +118,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Analytics.h" />
     <ClInclude Include="Condition.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="History.h" />

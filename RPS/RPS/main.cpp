@@ -1,6 +1,7 @@
 #include "Population.h"
 #include "History.h"
 #include "Library.h"
+#include "Analytics.h"
 
 extern "C" {
 #include "pyInterface.h"
@@ -25,7 +26,7 @@ int main()
 
 void PlayBot(char* file, char* directory)
 {
-    // TODO: Analytics
+    Analytics* analytics = new Analytics(directory);
 
     Py_Initialize();
     PyRun_SimpleString("import sys");
@@ -90,7 +91,14 @@ void PlayBot(char* file, char* directory)
     }
 
     // TODO: Analytics
+    // analytics->LogAnalytics(0.0f, "test.txt");
     // TODO: Output 100%
+
+    delete analytics;
+    delete population;
+    delete history;
+    delete library;
+    delete pyCurrentBot;
 }
 
 OUTCOME DetermineOutcome(MOVE one, MOVE two)
