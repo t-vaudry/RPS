@@ -31,7 +31,7 @@ Individual::Individual(bool isPlayerOne)
     mIsPlayerOne = isPlayerOne;
     mDefaultMove = static_cast<MOVE>(rand() % 3);
     mNextMove = mDefaultMove;
-    mRulePlayed = NULL;
+    mRulePlayed = nullptr;
     mAverageRulePoints = 0.0f;
     mAverageRulePoints = 0.0f;
 
@@ -49,7 +49,7 @@ Individual::Individual(Individual& parent, bool mutate)
     mIsPlayerOne = parent.mIsPlayerOne;
     mDefaultMove = static_cast<MOVE>(rand() % 3);
     mNextMove = mDefaultMove;
-    mRulePlayed = NULL;
+    mRulePlayed = nullptr;
     mAverageRulePoints = 0.0f;
     mAverageRulePoints = 0.0f;
 
@@ -115,7 +115,7 @@ void Individual::DeterminePastPlayedMoves()
     int historyLookBack = MAX_HISTORY_LOOKBACK;
     for (int i = 0; i < historyLookBack; i++)//TODO: 10 should be parametrized to whatever we decide the max lookback in history is
     {
-        Rule* ruletemp = nullptr;
+        Rule* ruletemp = nullptrptr;
         int highestScore = -1;
         for (int j = 0; j < mRules.size(); j++)
         {
@@ -131,7 +131,7 @@ void Individual::DeterminePastPlayedMoves()
             }
         }
 
-        if (ruletemp != nullptr)
+        if (ruletemp != nullptrptr)
         {
             mPlayedMoves[i] = ruletemp->mMove;
         }
@@ -193,7 +193,7 @@ void Individual::DetermineInitialFitness()
 
 void Individual::UpdateNextMove()
 {
-    Rule* ruletemp = nullptr;
+    Rule* ruletemp = nullptrptr;
     int highestScore = -1;
 
     for (int i = 0; i < mRules.size(); i++)
@@ -210,7 +210,7 @@ void Individual::UpdateNextMove()
         }
     }
 
-    if (ruletemp != nullptr)
+    if (ruletemp != nullptrptr)
     {
         mNextMove = ruletemp->mMove;
         mRulePlayed = ruletemp;
@@ -218,7 +218,7 @@ void Individual::UpdateNextMove()
     else
     {
         mNextMove = static_cast<MOVE>(rand() % 3);
-        mRulePlayed = nullptr;
+        mRulePlayed = nullptrptr;
     }
 }
 

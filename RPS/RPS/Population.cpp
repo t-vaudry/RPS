@@ -17,7 +17,7 @@ Population::~Population()
 {
     if (mChampion)
     {
-        mChampion = NULL;
+        mChampion = nullptr;
     }
 
     if (!mIndividuals.empty())
@@ -121,14 +121,14 @@ void Population::Evolve()
     while (parents.size() < mSize * PARENT_SIZE)
     {
         int indexSelectedParent;
-        Individual* fittestPlayer = NULL;
+        Individual* fittestPlayer = nullptr;
 
         for (int i = 0; i < 3; i++)
         {
             int random = rand() % mSize - 1;
             Individual* tempPlayer = mIndividuals[random];
 
-            if (fittestPlayer == NULL)
+            if (fittestPlayer == nullptr)
             {
                 fittestPlayer = tempPlayer;
                 indexSelectedParent = random;
