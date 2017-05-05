@@ -27,5 +27,7 @@
 #define CHILD_SIZE              0.8
 
 // Genetic distance percentages
+// TODO: REVIEW
 #define WEIGHTED_CONDITION      0.66 // Relative to probability of modifying condition
 #define WEIGHTED_ACTION         0.94 // Relative to probability of changing action
+#define WEIGHTED_LOCATION       0.00 // TODO

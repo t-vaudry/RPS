@@ -9,14 +9,7 @@ extern "C" {
 
 using namespace std;
 
-typedef enum {
-    WIN,
-    LOSS,
-    TIE
-} OUTCOME;
-
 void PlayBot(char* file, char* directory);
-OUTCOME DetermineOutcome(MOVE one, MOVE two);
 
 int main()
 {
@@ -33,8 +26,6 @@ void PlayBot(char* file, char* directory)
     PyRun_SimpleString("sys.path.append(\".\")");
 
     Population* population = new Population(500);
-    History* history = new History;
-    Library* library = new Library;
     RPSBot* pyCurrentBot = CompileBot(file);
     int rounds = 0;
 
@@ -49,17 +40,17 @@ void PlayBot(char* file, char* directory)
             MOVE ourMove = population->GetChampionNextMove();
             MOVE botMove;
 
-            pyCurrentBot = PlayBotRound(pyCurrentBot, (rounds != 0) ? history->GetLastMove() : -1);
+            pyCurrentBot = PlayBotRound(pyCurrentBot, (rounds != 0) ? gHistory.GetLastMove() : -1);
             botMove = static_cast<MOVE>(pyCurrentBot->outputMove);
 
-            history->Add(ourMove, botMove);
+            gHistory.Add(ourMove, botMove);
 
             OUTCOME outcome = DetermineOutcome(ourMove, botMove);
-            if (outcome == WIN)
+            if (outcome == W)
             {
                 lossCount = 0;
             }
-            else if (outcome == LOSS)
+            else if (outcome == L)
             {
                 lossCount++;
             }
@@ -73,7 +64,7 @@ void PlayBot(char* file, char* directory)
 
             if (lossCount == LOSING_STREAK)
             {
-                library->Add(population->GetChampion());
+                gLibrary.Add(population->GetChampion());
 
                 float tempFitness = population->GetChampionFitness();
                 while (population->GetChampionFitness() < (tempFitness + abs(tempFitness * 0.1)))
@@ -96,46 +87,5 @@ void PlayBot(char* file, char* directory)
 
     delete analytics;
     delete population;
-    delete history;
-    delete library;
     delete pyCurrentBot;
-}
-
-OUTCOME DetermineOutcome(MOVE one, MOVE two)
-{
-    OUTCOME outcome;
-    switch (one)
-    {
-    case R:
-        switch (two)
-        {
-        case R: outcome = TIE; break;
-        case P: outcome = LOSS; break;
-        case S: outcome = WIN; break;
-        default: break;
-        }
-        break;
-    case P:
-        switch (two)
-        {
-        case R: outcome = WIN; break;
-        case P: outcome = TIE; break;
-        case S: outcome = LOSS; break;
-        default: break;
-        }
-        break;
-    case S:
-        switch (two)
-        {
-        case R: outcome = LOSS; break;
-        case P: outcome = WIN; break;
-        case S: outcome = TIE; break;
-        default: break;
-        }
-        break;
-    default:
-        break;
-    }
-
-    return outcome;
 }

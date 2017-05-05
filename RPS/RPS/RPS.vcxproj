@@ -119,7 +119,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Analytics.h" />
-    <ClInclude Include="Condition.h" />
+    <ClInclude Include="Rule.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="History.h" />
     <ClInclude Include="Individual.h" />
@@ -132,6 +132,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Population.cpp" />
     <ClCompile Include="pyInterface.c" />
+    <ClCompile Include="Rule.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="pyfunc.py" />

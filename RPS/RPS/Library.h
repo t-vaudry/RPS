@@ -12,3 +12,5 @@ struct Library {
         library.push_back(champion);
     }
 };
+
+static Library gLibrary;

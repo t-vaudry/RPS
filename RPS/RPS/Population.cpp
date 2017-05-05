@@ -214,6 +214,7 @@ void Population::Evolve()
         }
     }
 
+    // TODO: remove when comfortable w/ code
     assert(offspring.size() == 8 * mSize);
 
     sort(begin(offspring), end(offspring), LessThanKey());

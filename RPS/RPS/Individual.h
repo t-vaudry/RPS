@@ -6,7 +6,7 @@
 #include <iostream>
 #include <vector>
 
-#include "Condition.h"
+#include "Rule.h"
 
 using namespace std;
 
@@ -14,52 +14,21 @@ typedef enum
 {
     Add,
     Modify
-} MUTATIONTYPE;
+} MUTATION_TYPE;
 
 typedef enum
 {
     ModifyCondition,
     AddCondition,
-    ChangeAction
-} MODIFICATIONTYPE;
-
-typedef enum
-{
-    R,
-    P,
-    S,
-    NO
-} MOVE; 
-
-struct Rule
-{
-    //TODO ANITA: public or make accessors?
-public:
-    vector<Condition> mConditions;
-    MOVE mMove;
-    int mScore; //Based on number of conditions
-    int mTimesUsed; //Based on how often used/successful
-    int mTimesWon;
-
-public:
-    //TODO ANITA: Do we need all 3? We probably don't ever need to pass conditions
-    static bool IsRuleSatisfied(Rule& rule) { return false; }
-    static bool IsRuleSatisfied(Rule& rule, int turn = 0) { return false; } //Could replace the basic version
-    static bool IsRuleSatisfied(Rule& rule, vector<Condition>& conditions);
-
-    static Rule GenerateRandomRule(bool oneConditionOnly = false);
-
-    static float GetGeneticDistanceBetweenRules(const Rule& rule1, const Rule& rule2);
-
-    inline int GetRuleScore() { return mScore; }
-};
+    ChangeAction,
+    ChangeLocation
+} MODIFICATION_TYPE;
 
 class Individual
 {
 private:
     vector<Rule> mRules;
     float mFitness;
-    bool mIsPlayerOne;
     MOVE mDefaultMove;
     MOVE mNextMove;
     Rule* mRulePlayed;
@@ -71,10 +40,9 @@ private:
     static int mIDCounter;
 public:
     Individual();
-    Individual(bool isPlayerOne);
     Individual(Individual& parent, bool mutate);
 
-    void MutatePlayer(MUTATIONTYPE mutationBaseType);
+    void MutatePlayer(MUTATION_TYPE mutationBaseType);
 
     inline void AddRule(Rule rule) { mRules.push_back(rule); }
 

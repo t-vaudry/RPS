@@ -8,7 +8,8 @@ using namespace std;
 struct History {
     vector< pair<MOVE, MOVE> > mHistory;
 
-    void Add(MOVE one, MOVE two) {
+    void Add(MOVE one, MOVE two)
+    {
         if (!(mHistory.size() < MAX_HISTORY_SAVED))
         {
             mHistory.erase(mHistory.begin());
@@ -17,7 +18,20 @@ struct History {
         mHistory.push_back(make_pair(one, two));
     }
 
-    MOVE GetLastMove() {
+    MOVE GetLastMove()
+    {
         return mHistory.back().first;
     }
+
+    int GetSize()
+    {
+        return mHistory.size();
+    }
+
+    pair<MOVE, MOVE> operator[](int index)
+    {
+        return mHistory[index];
+    }
 };
+
+static History gHistory;
