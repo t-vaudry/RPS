@@ -1,0 +1,1 @@
+output = dict(R='P', P='S', S='R').get(input, 'R')

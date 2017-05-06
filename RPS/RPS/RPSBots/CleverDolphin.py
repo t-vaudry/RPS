@@ -1,0 +1,2 @@
+o = "R"
+output = o

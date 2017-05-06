@@ -9,7 +9,7 @@ Population::Population(int size) : mSize(size)
         mIndividuals.push_back(new Individual);
     }
 
-    mChampion = mIndividuals[rand() % mSize - 1];
+    mChampion = mIndividuals.back();
     mAverageFitness = 0.0f;
 }
 
@@ -120,7 +120,7 @@ void Population::Evolve()
 
     while (parents.size() < mSize * PARENT_SIZE)
     {
-        int indexSelectedParent = rand() % mIndividuals.size(); //ANITA: This was uninitalized and caused issues when it wasn't being set. Is there really a situation where it shouldn't be set?
+        int indexSelectedParent = -1;
         Individual* fittestPlayer = nullptr;
 
         for (int i = 0; i < 3; i++)
@@ -152,6 +152,8 @@ void Population::Evolve()
         parents.push_back(fittestPlayer);
         mIndividuals.erase(mIndividuals.begin() + indexSelectedParent);
     }
+
+    assert(parents.size() == PARENT_SIZE * mSize);
 
     vector<Individual*> offspring;
     for (int j = 0; j < 10 * CHILD_SIZE / PARENT_SIZE; j++)
@@ -193,6 +195,7 @@ void Population::Evolve()
                 tempParents.clear();
                 tempChildren.clear();
                 tempKeepers.clear();
+                break;
             }
             case CROSSOVER:
             {
@@ -204,27 +207,30 @@ void Population::Evolve()
                 offspring.push_back(tempKeepers[1]);
 
                 tempKeepers.clear();
+                break;
             }
             case CLONE:
             {
                 offspring.push_back(tempIndiv);
                 offspring.push_back(new Individual(*tempIndiv, !MUTATION));
+                break;
             }
             }
         }
     }
 
     // TODO: remove when comfortable w/ code
-    //assert(offspring.size() == 8 * mSize); //This is not true. With mSize = 500, this was 24000
+    assert(offspring.size() == 16 * mSize);
 
     sort(begin(offspring), end(offspring), LessThanKey());
 
     vector<Individual*> newPopulation;
     for (int i = 0; i < mSize; i++)
     {
-        newPopulation.push_back(offspring[mSize - i - 1]);
+        newPopulation.push_back(offspring[16 * mSize - i - 1]);
     }
 
+    offspring.clear(); // TODO: delete individuals we don't use
     mIndividuals = newPopulation;
     SwitchChampion();
 }

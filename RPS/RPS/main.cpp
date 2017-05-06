@@ -1,3 +1,5 @@
+#include <windows.h>
+
 #include "Population.h"
 #include "History.h"
 #include "Library.h"
@@ -13,8 +15,8 @@ void PlayBot(char* file, char* directory);
 
 int main()
 {
-    // TODO: Modify path
-    PlayBot("2_rps_cracker.py", "C:/Users/anita/Documents/Repositories/RPS-Refactor/RPS/BotPlayers/");
+    CreateDirectory("RPSBots/test", NULL);
+    PlayBot("bayes6.py", "RPSBots/");
     return 0;
 }
 

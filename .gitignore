@@ -253,3 +253,6 @@ paket-files/
 
 # Compiled Python programs
 *.pyc
+
+# Generated .csv Files
+*.csv

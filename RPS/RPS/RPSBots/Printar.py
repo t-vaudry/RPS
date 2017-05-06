@@ -1,0 +1,2 @@
+print input
+output = 'R'

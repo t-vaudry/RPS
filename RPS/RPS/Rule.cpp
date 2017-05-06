@@ -13,10 +13,10 @@ Rule::Rule(bool oneConditionOnly)
     mTimesWon = 0;
 }
 
-bool Rule::IsRuleSatisfied(int turn) // TODO: Out of bounds somewhere
+bool Rule::IsRuleSatisfied(int turn)
 {
     if (mConditions.size() > gHistory.GetSize())
-        return false;
+        return false; // TODO: this is bad... we would need infinite history
 
     bool satisfied = true;
     for (int i = 0; i < mConditions.size(); i++)
