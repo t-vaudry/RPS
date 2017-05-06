@@ -15,10 +15,23 @@ Rule::Rule(bool oneConditionOnly)
 
 bool Rule::IsRuleSatisfied(int turn) // TODO: Out of bounds somewhere
 {
-    return mConditions[turn].mOutcome == X || mConditions[turn].mOutcome == DetermineOutcome(gHistory[turn].first, gHistory[turn].second);
+    if (mConditions.size() > gHistory.GetSize())
+        return false;
+
+    bool satisfied = true;
+    for (int i = 0; i < mConditions.size(); i++)
+    {
+        if (gHistory.GetSize() < turn + i + 1)
+            return false;
+
+        satisfied = mConditions[turn].mOutcome == X || mConditions[turn].mOutcome == DetermineOutcome(gHistory[turn].first, gHistory[turn].second);
+        if (!satisfied)
+            break;
+    }
+    return satisfied;
 }
 
-bool Rule::IsRuleSatisfied(Rule& rule)
+bool Rule::IsEquivalent(Rule& rule)
 {
     int maxSize = rule.GetConditionsSize() > mConditions.size() ? rule.GetConditionsSize() : mConditions.size();
     bool isSatisfied = true;

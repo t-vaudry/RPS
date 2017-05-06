@@ -303,7 +303,7 @@ float Individual::GetSemanticDistanceTo(Individual* otherInd)
 
         for (int j = 0; j < otherInd->mRules.size(); j++)
         {
-            if (mRules[i].IsRuleSatisfied(otherInd->mRules[j]))
+            if (mRules[i].IsEquivalent(otherInd->mRules[j]))
             {
                 int tempScore = otherInd->GetRule(j).GetScore();
                 if (playedMove == NO || tempScore > highscore)

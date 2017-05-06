@@ -14,7 +14,7 @@ void PlayBot(char* file, char* directory);
 int main()
 {
     // TODO: Modify path
-    PlayBot("bayes6.py", "C:/Users/thoma/Desktop/RPSBots/");
+    PlayBot("2_rps_cracker.py", "C:/Users/anita/Documents/Repositories/RPS-Refactor/RPS/BotPlayers/");
     return 0;
 }
 

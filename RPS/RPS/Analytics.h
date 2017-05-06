@@ -26,7 +26,7 @@ void Analytics::LogAnalytics(float value, char* filename)
     strncpy_s(externalPath, MAX_BUFFER, mPath, MAX_BUFFER);
     strncat_s(externalPath, MAX_BUFFER, "test/", MAX_BUFFER);
     strncat_s(externalPath, MAX_BUFFER, filename, MAX_BUFFER);
-    mOutput.open(externalPath);
+    mOutput.open(externalPath, ios_base::app);
     mOutput << value << ",";
     mOutput.close();
 }

@@ -52,7 +52,8 @@ public:
     Rule(bool oneConditionOnly = true);
 
     bool IsRuleSatisfied(int turn = 0);
-    bool IsRuleSatisfied(Rule& rule);
+
+    bool IsEquivalent(Rule& rule);
 
     MOVE GetNextMove();
 

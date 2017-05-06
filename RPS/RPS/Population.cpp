@@ -120,12 +120,12 @@ void Population::Evolve()
 
     while (parents.size() < mSize * PARENT_SIZE)
     {
-        int indexSelectedParent;
+        int indexSelectedParent = rand() % mIndividuals.size(); //ANITA: This was uninitalized and caused issues when it wasn't being set. Is there really a situation where it shouldn't be set?
         Individual* fittestPlayer = nullptr;
 
         for (int i = 0; i < 3; i++)
         {
-            int random = rand() % mSize - 1;
+            int random = rand() % mIndividuals.size();
             Individual* tempPlayer = mIndividuals[random];
 
             if (fittestPlayer == nullptr)
@@ -158,7 +158,7 @@ void Population::Evolve()
     {
         for (int i = 0; i < mSize * PARENT_SIZE; i++)
         {
-            Individual* tempIndiv = parents[i - 1];
+            Individual* tempIndiv = parents[i];
             Individual* tempIndiv2;
 
             EVOLUTION evolutionType;
@@ -197,7 +197,7 @@ void Population::Evolve()
             case CROSSOVER:
             {
                 vector<Individual*> tempKeepers;
-                tempIndiv2 = parents[rand() % parents.size() - 1];
+                tempIndiv2 = parents[rand() % parents.size()];
 
                 tempKeepers = Crossover(tempIndiv, tempIndiv2);
                 offspring.push_back(tempKeepers[0]);
@@ -215,14 +215,14 @@ void Population::Evolve()
     }
 
     // TODO: remove when comfortable w/ code
-    assert(offspring.size() == 8 * mSize);
+    //assert(offspring.size() == 8 * mSize); //This is not true. With mSize = 500, this was 24000
 
     sort(begin(offspring), end(offspring), LessThanKey());
 
     vector<Individual*> newPopulation;
     for (int i = 0; i < mSize; i++)
     {
-        newPopulation.push_back(offspring[mSize * PARENT_SIZE - i - 1]);
+        newPopulation.push_back(offspring[mSize - i - 1]);
     }
 
     mIndividuals = newPopulation;
