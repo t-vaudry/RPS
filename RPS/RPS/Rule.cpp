@@ -13,7 +13,7 @@ Rule::Rule(bool oneConditionOnly)
     mTimesWon = 0;
 }
 
-bool Rule::IsRuleSatisfied(int turn)
+bool Rule::IsRuleSatisfied(int turn) // TODO: Out of bounds somewhere
 {
     return mConditions[turn].mOutcome == X || mConditions[turn].mOutcome == DetermineOutcome(gHistory[turn].first, gHistory[turn].second);
 }

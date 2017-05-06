@@ -37,7 +37,9 @@ private:
     float mAverageRulePoints;
     int mID;
 
-    static int mIDCounter;
+    static int sIDCounter;
+    static const float sMutationParameters[2];
+    static const float sModificationParameters[4];
 public:
     Individual();
     Individual(Individual& parent, bool mutate);

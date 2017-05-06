@@ -22,8 +22,9 @@ struct Analytics {
 
 void Analytics::LogAnalytics(float value, char* filename)
 {
-    char* externalPath;
+    char* externalPath = new char[MAX_BUFFER];
     strncpy_s(externalPath, MAX_BUFFER, mPath, MAX_BUFFER);
+    strncat_s(externalPath, MAX_BUFFER, "test/", MAX_BUFFER);
     strncat_s(externalPath, MAX_BUFFER, filename, MAX_BUFFER);
     mOutput.open(externalPath);
     mOutput << value << ",";

@@ -15,9 +15,10 @@
 #define MAX_HISTORY_LOOKBACK    10
 #define ADD_RULE                0.4
 #define MODIFY_RULE             0.6
-#define ADD_COND                0.3
-#define MODIFY_COND             0.6
-#define CHANGE_ACT              0.1
+#define ADD_COND                0.25
+#define MODIFY_COND             0.5
+#define CHANGE_ACT              0.15
+#define CHANGE_LOC              0.1
 
 // Population constants
 #define MUTATION_PROB           0.5

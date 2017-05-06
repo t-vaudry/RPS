@@ -18,6 +18,11 @@ struct History {
         mHistory.push_back(make_pair(one, two));
     }
 
+    bool Empty()
+    {
+        return mHistory.empty();
+    }
+
     MOVE GetLastMove()
     {
         return mHistory.back().first;
@@ -30,7 +35,7 @@ struct History {
 
     pair<MOVE, MOVE> operator[](int index)
     {
-        return mHistory[index];
+        return mHistory[mHistory.size() - 1 - index];
     }
 };
 

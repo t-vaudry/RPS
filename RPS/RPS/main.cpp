@@ -13,7 +13,8 @@ void PlayBot(char* file, char* directory);
 
 int main()
 {
-    PlayBot("", "");
+    // TODO: Modify path
+    PlayBot("bayes6.py", "C:/Users/thoma/Desktop/RPSBots/");
     return 0;
 }
 
@@ -21,13 +22,19 @@ void PlayBot(char* file, char* directory)
 {
     Analytics* analytics = new Analytics(directory);
 
+    char* fileDest = new char[MAX_BUFFER];
+    strncpy_s(fileDest, MAX_BUFFER, directory, MAX_BUFFER);
+    strncat_s(fileDest, MAX_BUFFER, file, MAX_BUFFER);
+
     Py_Initialize();
     PyRun_SimpleString("import sys");
     PyRun_SimpleString("sys.path.append(\".\")");
 
     Population* population = new Population(500);
-    RPSBot* pyCurrentBot = CompileBot(file);
+    RPSBot* pyCurrentBot = CompileBot(fileDest);
     int rounds = 0;
+
+    int score = 0;
 
     while (rounds < NUM_OF_ROUNDS)
     {
@@ -48,13 +55,15 @@ void PlayBot(char* file, char* directory)
             OUTCOME outcome = DetermineOutcome(ourMove, botMove);
             if (outcome == W)
             {
+                score++;
                 lossCount = 0;
             }
             else if (outcome == L)
             {
+                score--;
                 lossCount++;
             }
-            else // outcome == TIE
+            else // outcome == D
             {
                 lossCount = 0;
             }
@@ -75,6 +84,7 @@ void PlayBot(char* file, char* directory)
                 lossCount = 0;
             }
 
+            analytics->LogAnalytics(score, "score.csv");
             rounds++;
         }
 

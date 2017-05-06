@@ -1,13 +1,16 @@
 #include "Individual.h"
 
 #include "Constants.h"
+#include "History.h"
 
-int Individual::mIDCounter = 0;
+int Individual::sIDCounter = 0;
+const float Individual::sMutationParameters[2] = { ADD_RULE, MODIFY_RULE };
+const float Individual::sModificationParameters[4] = { ADD_COND, MODIFY_COND, CHANGE_ACT, CHANGE_LOC };
 
 Individual::Individual()
 {
     //Initialize default values
-    mID = mIDCounter++;
+    mID = sIDCounter++;
     mDefaultMove = static_cast<MOVE>(rand() % 3);
     mNextMove = mDefaultMove;
     mRulePlayed = nullptr;
@@ -24,7 +27,7 @@ Individual::Individual()
 Individual::Individual(Individual& parent, bool mutate)
 {
     //Initialize default values
-    mID = mIDCounter++;
+    mID = sIDCounter++;
     mDefaultMove = static_cast<MOVE>(rand() % 3);
     mNextMove = mDefaultMove;
     mRulePlayed = nullptr;
@@ -36,7 +39,18 @@ Individual::Individual(Individual& parent, bool mutate)
     if (mutate)
     {
         MUTATION_TYPE mutationType = Add;
-        //TODO: Determine mutation type based on probabilities of all mutations
+        float mutation = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+
+        float temp = 0;
+        for (int i = 0; i < 2; i++)
+        {
+            temp += sMutationParameters[i];
+            if (mutation <= temp)
+            {
+                mutationType = static_cast<MUTATION_TYPE>(i);
+                break;
+            }
+        }
 
         MutatePlayer(mutationType);
     }
@@ -51,8 +65,18 @@ Individual::~Individual() {
 
 void Individual::MutatePlayer(MUTATION_TYPE mutationBaseType)
 {
-    MODIFICATION_TYPE modificationType = ChangeAction;
-    //TODO: Determine modificationType
+    MODIFICATION_TYPE modificationType = AddCondition;
+    float modification = static_cast <float> (rand()) / static_cast <float> (RAND_MAX);
+
+    float temp = 0;
+    for (int i = 0; i < 4; i++)
+    {
+        temp += sModificationParameters[i];
+        if (modification <= temp) {
+            modificationType = static_cast<MODIFICATION_TYPE>(i);
+            break;
+        }
+    }
 
     switch (mutationBaseType)
     {
@@ -64,8 +88,6 @@ void Individual::MutatePlayer(MUTATION_TYPE mutationBaseType)
     case Modify:
     {
         int randomRule = rand() % mRules.size();
-
-        //ANITA: Why was there a +1 here?
         int randomCondition = rand() % (mRules[randomRule].GetConditionsSize());
 
         switch (modificationType)
@@ -91,10 +113,9 @@ void Individual::MutatePlayer(MUTATION_TYPE mutationBaseType)
 
 void Individual::DeterminePastPlayedMoves()
 {
-    //TODO: Need history to get lookback
-    //int historyLookBack = History.size() < MAX_HISTORY_LOOKBACK ? History.size() : MAX_HISTORY_LOOKBACK;
-    int historyLookBack = MAX_HISTORY_LOOKBACK;
-    for (int i = 0; i < historyLookBack; i++)//TODO: 10 should be parametrized to whatever we decide the max lookback in history is
+    int historyLookBack = gHistory.GetSize() < MAX_HISTORY_LOOKBACK ? gHistory.GetSize() : MAX_HISTORY_LOOKBACK;
+    
+    for (int i = 0; i < historyLookBack; i++)
     {
         Rule* ruletemp = nullptr;
         int highestScore = -1;
@@ -104,6 +125,7 @@ void Individual::DeterminePastPlayedMoves()
             {
                 int rulescore = mRules[j].GetScore();
                 //ANITA: Changed the conditions here
+                //THOMAS: What?
                 if (rulescore > highestScore)
                 {
                     ruletemp = &mRules[j];
@@ -123,34 +145,33 @@ void Individual::DeterminePastPlayedMoves()
     }
 }
 
-//TODO ANITA: Need to determine how we are checking for win/loss
 void Individual::DetermineInitialFitness()
 {
     float reward = 0;
     int historyLookBack = MAX_HISTORY_LOOKBACK;
-    //TODO ANITA: Add history
-    //if (!History.empty())
+
+    if (!gHistory.Empty())
     {
         //Get the moves played by the player in the past 10 rounds
         DeterminePastPlayedMoves();
 
         for (int i = 0; i < historyLookBack; i++)
         {
-            //if (static_cast<int>(createCondition(playedMove[i], History.at(History.size() - i - 1).second)) < pow(2, 3))
-            //{
-            //    reward += 1; //fitness = fitness*(1 - alpha) + reward*alpha;
-            //}
-            //else if (static_cast<int>(createCondition(playedMove[i], History.at(History.size() - i - 1).second)) > pow(2, 5))
-            //{
-            //    reward += -1; //fitness = fitness*(1 - alpha) + reward*alpha;
-            //}
+            if (DetermineOutcome(mPlayedMoves[i], gHistory[i].second) == W)
+            {
+                reward += 1;
+            }
+            else if (DetermineOutcome(mPlayedMoves[i], gHistory[i].second) == L)
+            {
+                reward += -1;
+            }
         }
 
         //TODO: Evaluate based on history
         //TODO: evaluate fitness every turn? Or less
         if (historyLookBack != 0)
         {
-            //mFitness = mFitness*(1 - ALPHA) + (reward / historyLookBack)*ALPHA;
+            mFitness = mFitness*(1 - ALPHA) + (reward / historyLookBack)*ALPHA;
         }
     }
 }
@@ -194,28 +215,28 @@ void Individual::UpdateFitness()
     }
 
     float reward = 0;
-//TODO
-//if (!History.empty())
-{
-    //TODO: How to make conditions now?
-    //if (static_cast<int>(Condition::CreateCondition(nextMove, History.at(History.size() - 1).second)) < pow(2, 3))
-    {
-        reward += 1; //fitness = fitness*(1 - alpha) + reward*alpha;
 
-                        //mark that the rule won
-        if (mRulePlayed)
-            mRulePlayed->IncrementTimesWon();
-    }
-    //else if (static_cast<int>(createCondition(nextMove, History.at(History.size() - 1).second)) > pow(2, 5))
+    if (!gHistory.Empty())
     {
-        reward += -1; //fitness = fitness*(1 - alpha) + reward*alpha;
-    }
+        if (DetermineOutcome(gHistory[0].first, gHistory[0].second) == W)
+        {
+            reward = 1;
+
+            //mark that the rule won
+            if (mRulePlayed)
+            {
+                mRulePlayed->IncrementTimesWon();
+            }
+        }
+        else if (DetermineOutcome(gHistory[0].first, gHistory[0].second) == L)
+        {
+            reward = -1;
+        }
 
     //TODO: Evaluate based on history
     //TODO: evaluate fitness every turn? Or less
     mFitness = mFitness*(1 - ALPHA) + reward*ALPHA;
-
-}
+    }
 }
 
 void Individual::UpdateAverageScore()
